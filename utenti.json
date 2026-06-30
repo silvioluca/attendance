@@ -1,14 +1,20 @@
 {
   "ABE1AF89": {
     "nome": "Lucà Silvio",
-    "giorni": {}
+    "giorni": {
+      "2026-07-01": "non entrato"
+    }
   },
   "A373A3AA": {
     "nome": "Carbone Teresa",
-    "giorni": {}
+    "giorni": {
+      "2026-07-01": "non entrato"
+    }
   },
   "D4D0B789": {
     "nome": "Sbodio Paola",
-    "giorni": {}
+    "giorni": {
+      "2026-07-01": "non entrato"
+    }
   }
 }
