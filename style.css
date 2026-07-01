@@ -172,7 +172,8 @@ footer {
 }
 
 @media (max-width: 720px) {
-  .board { grid-template-columns: 1fr; }
+  /* riquadri uno sotto l'altro */
+  .board { grid-template-columns: 1fr !important; gap: .8rem; }
   select { min-width: 0; width: 100%; }
   .field { width: 100%; }
 }
