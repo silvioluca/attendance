@@ -26,10 +26,22 @@
       <label for="day">Giorno</label>
       <select id="day"></select>
     </div>
+    <div class="field">
+      <label for="stato">Stato</label>
+      <select id="stato">
+        <option value="all">Tutti</option>
+        <option value="entrato">Entrati</option>
+        <option value="uscito">Usciti</option>
+        <option value="non entrato">Non entrati</option>
+      </select>
+    </div>
     <div class="field search">
       <label for="q">Cerca docente</label>
       <input id="q" type="text" placeholder="Digita un nome…" autocomplete="off">
     </div>
+    <button id="refresh" class="btn" type="button">
+      <span class="btn-ico" aria-hidden="true">↻</span> Aggiorna
+    </button>
   </div>
 
   <div class="board" id="board">
