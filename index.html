@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bacheca presenze · Docenti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:      #10261f;   /* verde lavagna profondo */
+    --panel:   #163027;   /* pannello */
+    --edge:    #2a4a3e;   /* bordi tenui */
+    --chalk:   #f3efe4;   /* testo chiaro, gesso */
+    --dim:     #8fa79b;   /* testo attenuato */
+    --in:      #6fcf97;   /* entrato, verde */
+    --out:     #e0a458;   /* uscito, ambra */
+    --none:    #6b8079;   /* non entrato, spento */
+    --brass:   #c8a24a;   /* dettaglio ottone */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background:
+      radial-gradient(1200px 600px at 70% -10%, #1a3a2e 0%, transparent 60%),
+      var(--bg);
+    color: var(--chalk);
+    font-family: "Inter", system-ui, sans-serif;
+    min-height: 100vh;
+    padding: clamp(1.2rem, 4vw, 3rem);
+    line-height: 1.5;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; }
+
+  /* ---- intestazione ---- */
+  header { margin-bottom: 2rem; }
+  .kicker {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .74rem; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--brass); margin-bottom: .6rem;
+  }
+  h1 {
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    font-size: clamp(2.1rem, 6vw, 3.4rem);
+    letter-spacing: -.015em;
+    line-height: 1.02;
+  }
+  .sub {
+    color: var(--dim); margin-top: .5rem; font-size: .98rem;
+    display: flex; gap: .5rem; align-items: center; flex-wrap: wrap;
+  }
+  .live {
+    display: inline-flex; align-items: center; gap: .4rem;
+    font-family: "IBM Plex Mono", monospace; font-size: .72rem;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--in);
+  }
+  .live .pulse {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--in);
+    box-shadow: 0 0 0 0 rgba(111,207,151,.6);
+    animation: pulse 2.2s infinite;
+  }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(111,207,151,.5); }
+    70%  { box-shadow: 0 0 0 8px rgba(111,207,151,0); }
+    100% { box-shadow: 0 0 0 0 rgba(111,207,151,0); }
+  }
+
+  /* ---- controlli ---- */
+  .bar {
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end;
+    padding: 1rem 1.2rem; margin-bottom: 1.6rem;
+    background: var(--panel); border: 1px solid var(--edge); border-radius: 12px;
+  }
+  .field { display: flex; flex-direction: column; gap: .35rem; }
+  .field label {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--dim);
+  }
+  select {
+    font: inherit; font-size: .95rem;
+    background: #0d1f19; color: var(--chalk);
+    border: 1px solid var(--edge); border-radius: 8px;
+    padding: .55rem .8rem; min-width: 210px;
+    cursor: pointer;
+  }
+  select:focus-visible { outline: 2px solid var(--brass); outline-offset: 1px; }
+  .search { flex: 1; min-width: 160px; }
+  .search input {
+    width: 100%; font: inherit; font-size: .95rem;
+    background: #0d1f19; color: var(--chalk);
+    border: 1px solid var(--edge); border-radius: 8px; padding: .55rem .8rem;
+  }
+  .search input:focus-visible { outline: 2px solid var(--brass); outline-offset: 1px; }
+  .search input::placeholder { color: var(--none); }
+
+  /* ---- tre colonne di stato ---- */
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .col {
+    background: var(--panel);
+    border: 1px solid var(--edge);
+    border-radius: 12px;
+    padding: 1rem 1rem 1.2rem;
+    min-height: 120px;
+  }
+  .col-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: .7rem; margin-bottom: .5rem;
+    border-bottom: 1px solid var(--edge);
+  }
+  .col-title {
+    display: flex; align-items: center; gap: .5rem;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
+  }
+  .tag { width: 9px; height: 9px; border-radius: 50%; }
+  .col.in    .tag { background: var(--in); }
+  .col.out   .tag { background: var(--out); }
+  .col.none  .tag { background: var(--none); }
+  .col.in    .col-title { color: var(--in); }
+  .col.out   .col-title { color: var(--out); }
+  .col.none  .col-title { color: var(--none); }
+  .count {
+    font-family: "Fraunces", serif; font-weight: 600; font-size: 1.5rem;
+    color: var(--chalk);
+  }
+
+  ul { list-style: none; }
+  li {
+    padding: .5rem .1rem;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    font-size: 1rem;
+    display: flex; align-items: center; gap: .55rem;
+  }
+  li:last-child { border-bottom: none; }
+  li .dot { width: 6px; height: 6px; border-radius: 50%; flex: none; opacity: .8; }
+  .col.in   li .dot { background: var(--in); }
+  .col.out  li .dot { background: var(--out); }
+  .col.none li .dot { background: var(--none); }
+  .empty {
+    color: var(--none); font-size: .9rem; font-style: italic;
+    padding: .6rem .1rem;
+  }
+
+  /* ---- stati globali ---- */
+  .msg {
+    grid-column: 1 / -1;
+    text-align: center; padding: 3rem 1rem; color: var(--dim);
+    border: 1px dashed var(--edge); border-radius: 12px;
+  }
+  .msg.err { color: var(--out); border-color: var(--out); }
+
+  footer {
+    margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--edge);
+    display: flex; justify-content: space-between; gap: .5rem; flex-wrap: wrap;
+    font-family: "IBM Plex Mono", monospace; font-size: .7rem;
+    letter-spacing: .06em; color: var(--dim);
+  }
+
+  @media (max-width: 720px) {
+    .board { grid-template-columns: 1fr; }
+    select { min-width: 0; width: 100%; }
+    .field { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .live .pulse { animation: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Sala docenti · registro accessi</div>
+    <h1>Chi c'è oggi</h1>
+    <div class="sub">
+      <span class="live"><span class="pulse"></span> in aggiornamento</span>
+      <span id="meta">—</span>
+    </div>
+  </header>
+
+  <div class="bar">
+    <div class="field">
+      <label for="day">Giorno</label>
+      <select id="day"></select>
+    </div>
+    <div class="field search">
+      <label for="q">Cerca docente</label>
+      <input id="q" type="text" placeholder="Digita un nome…" autocomplete="off">
+    </div>
+  </div>
+
+  <div class="board" id="board">
+    <div class="msg" id="loading">Carico la bacheca…</div>
+  </div>
+
+  <footer>
+    <span id="updated">—</span>
+    <span>i dati cambiano a ogni passaggio della card</span>
+  </footer>
+
+</div>
+
+<script>
+  // JSON nello STESSO repo -> percorso relativo
+  const URL_DATI = "utenti.json";
+
+  const $day = document.getElementById("day");
+  const $q = document.getElementById("q");
+  const $board = document.getElementById("board");
+  const $meta = document.getElementById("meta");
+  const $updated = document.getElementById("updated");
+
+  let docenti = [];      // [{nome, giorni:{data:stato}}]
+  let date = [];         // date presenti, recenti prima
+
+  const MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno",
+                "luglio","agosto","settembre","ottobre","novembre","dicembre"];
+  const GG = ["domenica","lunedì","martedì","mercoledì","giovedì","venerdì","sabato"];
+
+  function dataEstesa(iso) {
+    if (!iso) return "—";
+    const p = iso.split("-");
+    if (p.length !== 3) return iso;
+    const d = new Date(+p[0], +p[1]-1, +p[2]);
+    return GG[d.getDay()] + " " + (+p[2]) + " " + MESI[+p[1]-1];
+  }
+
+  async function carica() {
+    try {
+      const r = await fetch(URL_DATI + "?t=" + Date.now(), { cache: "no-store" });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const json = await r.json();
+
+      docenti = Object.entries(json).map(([uid, u]) => ({
+        nome: (u.nome || "Senza nome").trim(),
+        giorni: u.giorni || {}
+      }));
+
+      const set = new Set();
+      docenti.forEach(d => Object.keys(d.giorni).forEach(g => set.add(g)));
+      date = [...set].sort().reverse();
+
+      popolaGiorni();
+      render();
+      $meta.textContent = docenti.length + " docenti · " + date.length + " giorni registrati";
+      const ora = new Date();
+      $updated.textContent = "Ultima lettura " + ora.toLocaleTimeString("it-IT", {hour:"2-digit", minute:"2-digit"});
+    } catch (e) {
+      $board.innerHTML =
+        '<div class="msg err">Non riesco a leggere <b>' + URL_DATI + '</b> (' + e.message + ').<br>' +
+        'Controlla che il file sia pubblicato con GitHub Pages in questo repository.</div>';
+    }
+  }
+
+  function popolaGiorni() {
+    const sel = $day.value;
+    $day.innerHTML = "";
+    date.forEach(g => {
+      const o = document.createElement("option");
+      o.value = g;
+      o.textContent = dataEstesa(g) + "  ·  " + g;
+      $day.appendChild(o);
+    });
+    if (sel && date.includes(sel)) $day.value = sel;
+  }
+
+  function render() {
+    const giorno = $day.value;
+    const query = $q.value.trim().toLowerCase();
+
+    if (!giorno) {
+      $board.innerHTML = '<div class="msg">Nessun giorno registrato per ora.</div>';
+      return;
+    }
+
+    // raccogli e ordina alfabeticamente
+    let righe = docenti
+      .map(d => ({ nome: d.nome, stato: d.giorni[giorno] || "non entrato" }))
+      .filter(x => !query || x.nome.toLowerCase().includes(query))
+      .sort((a, b) => a.nome.localeCompare(b.nome, "it"));
+
+    const gruppi = {
+      entrato:       righe.filter(x => x.stato === "entrato"),
+      uscito:        righe.filter(x => x.stato === "uscito"),
+      "non entrato": righe.filter(x => x.stato === "non entrato")
+    };
+
+    const colonne = [
+      { chiave: "entrato",     cls: "in",   etichetta: "Entrati" },
+      { chiave: "uscito",      cls: "out",  etichetta: "Usciti" },
+      { chiave: "non entrato", cls: "none", etichetta: "Non entrati" }
+    ];
+
+    let html = "";
+    for (const c of colonne) {
+      const lista = gruppi[c.chiave];
+      html += '<section class="col ' + c.cls + '">' +
+        '<div class="col-head"><span class="col-title"><span class="tag"></span>' +
+        c.etichetta + '</span><span class="count">' + lista.length + '</span></div>';
+      if (lista.length === 0) {
+        html += '<p class="empty">nessuno</p>';
+      } else {
+        html += '<ul>' + lista.map(x =>
+          '<li><span class="dot"></span>' + escapeHtml(x.nome) + '</li>'
+        ).join("") + '</ul>';
+      }
+      html += '</section>';
+    }
+    $board.innerHTML = html;
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+  }
+
+  $day.addEventListener("change", render);
+  $q.addEventListener("input", render);
+
+  carica();
+  setInterval(carica, 30000);   // ricarica ogni 30s
+</script>
+</body>
+</html>
