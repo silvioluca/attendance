@@ -55,7 +55,7 @@ function popolaGiorni() {
   date.forEach(g => {
     const o = document.createElement("option");
     o.value = g;
-    o.textContent = dataEstesa(g) + "  ·  " + g;
+    o.textContent = dataEstesa(g);
     $day.appendChild(o);
   });
   if (sel && date.includes(sel)) $day.value = sel;
