@@ -1,5 +1,5 @@
 // raw GitHub: cache piu' corta di Pages -> dati piu' freschi
-const URL_DATI = "https://raw.githubusercontent.com/silvioluca/attendance/main/utenti.json";
+const URL_DATI = "https://raw.githubusercontent.com/silvioluca/attendance/refs/heads/main/utenti.json";
 
 const $day = document.getElementById("day");
 const $q = document.getElementById("q");
