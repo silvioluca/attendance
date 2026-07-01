@@ -87,6 +87,23 @@ select:focus-visible { outline: 2px solid var(--brass); outline-offset: 1px; }
 .search input:focus-visible { outline: 2px solid var(--brass); outline-offset: 1px; }
 .search input::placeholder { color: var(--none); }
 
+/* ---- tasto aggiorna ---- */
+.btn {
+  font: inherit; font-size: .9rem; font-weight: 500;
+  display: inline-flex; align-items: center; gap: .45rem;
+  background: var(--base); color: var(--chalk);
+  border: 1px solid var(--edge); border-radius: 8px;
+  padding: .58rem 1rem; cursor: pointer;
+  transition: background .15s, transform .05s;
+}
+.btn:hover { background: #16697b; }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { outline: 2px solid var(--brass); outline-offset: 1px; }
+.btn:disabled { opacity: .6; cursor: default; }
+.btn-ico { display: inline-block; font-size: 1.05rem; line-height: 1; }
+.btn.loading .btn-ico { animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
 /* ---- tre colonne di stato ---- */
 .board {
   display: grid;
@@ -161,4 +178,5 @@ footer {
 }
 @media (prefers-reduced-motion: reduce) {
   .live .pulse { animation: none; }
+  .btn.loading .btn-ico { animation: none; }
 }
